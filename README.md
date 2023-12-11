@@ -2,6 +2,8 @@
 
 The project is built on JavaScript + Playwright.
 
+Demo and how to use it video - https://youtu.be/_FYXGBorfyk
+
 Project suppose to work on both Windows and Mac, but I am using Mac and don't have a Windows machine to test it on, so please let me know if you face any issues on Windows and I will do my best to fix issues if any.
 
 # Getting started
