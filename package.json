@@ -1,0 +1,13 @@
+{
+  "name": "slava-linkedin-job-search-playwright",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "slava bulba",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.1"
+  }
+}
