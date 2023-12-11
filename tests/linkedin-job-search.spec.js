@@ -58,4 +58,5 @@ test('linkedin job search', async ({ page }) => {
   for (let job of jobsFromAllPagesWithFilteredNames) {
     printToFileAndConsole('\'' + job.split(' --- ')[0] + ' --- ' + job.split(' --- ')[1] + '\',');
   }
+  printToFileAndConsole('');
 });

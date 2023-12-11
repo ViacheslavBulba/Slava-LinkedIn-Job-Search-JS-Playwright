@@ -74,7 +74,6 @@ export async function linkedInLogin(page) {
   await page.waitForTimeout(2000);
 }
 
-
 async function clickOnFilterOption(text) {
   const page = process.playwrightPage;
   if (text === '') {
@@ -88,32 +87,24 @@ async function clickOnFilterOption(text) {
   }
 }
 
-
 export async function linkedInSetUpFilters(page, linkedinDatePostedFilter) {
   await page.locator('//*[text()="All filters"]').click();
   await page.waitForTimeout(2000);
-
   await page.locator('//*[text()="Most recent"]').first().click();
   await page.waitForTimeout(2000);
-
-
-
   if (experienceLevelFilter) {
     for (const exp of experienceLevelFilter) {
       await clickOnFilterOption(exp);
     }
   }
-
   if (jobTypeFilter) {
     for (const exp of jobTypeFilter) {
       await clickOnFilterOption(exp);
     }
   }
-
   if (salaryLevelFilter) {
     await clickOnFilterOption(salaryLevelFilter);
   }
-
   await page.locator('//button[@data-test-reusables-filters-modal-show-results-button]').click(); // show results button
   await page.waitForTimeout(5000);
   // // set up date posted filter
@@ -206,7 +197,22 @@ export async function linkedInCollectJobsAfterFiltersApplied(page, jobsFromAllPa
   while (continueSearch) {
     const unfilteredJobsOnOnePage = await linkedInGetAllUnfilteredJobsOnOnePage(page);
     for (let job of unfilteredJobsOnOnePage) {
-      if (textIncludesWords(job, jobNamePartsToInclude) && !textIncludesWords(job, CompanyOrJobNameToExclude) && !isAlreadyIncluded(job, jobsFromAllPagesWithFilteredNames)) {
+
+      let jobNamePartsToIncludeFlag = true;
+      if (jobNamePartsToInclude !== undefined) {
+        if (jobNamePartsToInclude.length !== 0) {
+          jobNamePartsToIncludeFlag = textIncludesWords(job, jobNamePartsToInclude);
+        }
+      }
+
+      let CompanyOrJobNameToExcludeFlag = true;
+      if (CompanyOrJobNameToExclude !== undefined) {
+        if (CompanyOrJobNameToExclude.length !== 0) {
+          CompanyOrJobNameToExcludeFlag = !textIncludesWords(job, jobNamePartsToInclude);
+        }
+      }
+
+      if (jobNamePartsToIncludeFlag && CompanyOrJobNameToExcludeFlag && !isAlreadyIncluded(job, jobsFromAllPagesWithFilteredNames)) {
         jobsFromAllPagesWithFilteredNames.add(job);
       } else {
         filteredOutJobs.add(job);
@@ -230,9 +236,14 @@ export async function linkedInCollectJobsAfterFiltersApplied(page, jobsFromAllPa
 }
 
 export async function linkedInOpenEachPosition(set, page, descriptionStopWordsArray) {
-  printToFileAndConsole("Opening each position to check each job description for stop words");
+  if (descriptionStopWordsArray === undefined || descriptionStopWordsArray.length === 0) {
+    return;
+  }
+  const amountOfJobs = set.size;
+  printToFileAndConsole(`Opening each position to check each job description for stop words: ${amountOfJobs} positions found`);
   let m = 1;
   for (let job of set) {
+    printToFileAndConsole(`Opening position ${m} out of ${amountOfJobs}`);
     const jd = await linkedInGetJobDescription(page, job.split(" --- ")[2]);
     if (textIncludesWords(jd, descriptionStopWordsArray)) {
       set.delete(job);

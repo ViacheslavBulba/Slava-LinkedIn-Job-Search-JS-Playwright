@@ -55,23 +55,23 @@ export const jobTypeFilter = [
 
 
 export const JobNamePartsToInclude = [ // jobs that have any of these in the name - include only them into the results
-  'QA',
-  'Test',
-  'SDET',
-  'Quality Assurance',
-  'Automation',
-  'Software Quality Engineer',
+  // 'QA',
+  // 'Test',
+  // 'SDET',
+  // 'Quality Assurance',
+  // 'Automation',
+  // 'Software Quality Engineer',
 ]
 
 
 
 export const JobDescriptionsStopWordsArray = [ // used while opening jobs after filtering by name to analyze job description
-  '$60,000/yr', // exact text copied from from job description
-  '$70,000/yr', // exact text copied from from job description
-  '$80,000/yr', // exact text copied from from job description
-  'Python', // any jobs that have this text in job description - will be excluded
-  '3+ years of stress/load/performance testing of web applications', // exact text copied from from job description
-  '1+ years of experience in CRM analytics - Salesforce', // exact text copied from from job description
+  // '$60,000/yr', // exact text copied from from job description
+  // '$70,000/yr', // exact text copied from from job description
+  // '$80,000/yr', // exact text copied from from job description
+  // 'Python', // any jobs that have this text in job description - will be excluded
+  // '3+ years of stress/load/performance testing of web applications', // exact text copied from from job description
+  // '1+ years of experience in CRM analytics - Salesforce', // exact text copied from from job description
 ]
 
 
