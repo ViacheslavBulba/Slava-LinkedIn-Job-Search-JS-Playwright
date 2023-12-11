@@ -197,18 +197,16 @@ export async function linkedInCollectJobsAfterFiltersApplied(page, jobsFromAllPa
   while (continueSearch) {
     const unfilteredJobsOnOnePage = await linkedInGetAllUnfilteredJobsOnOnePage(page);
     for (let job of unfilteredJobsOnOnePage) {
-
       let jobNamePartsToIncludeFlag = true;
       if (jobNamePartsToInclude !== undefined) {
         if (jobNamePartsToInclude.length !== 0) {
           jobNamePartsToIncludeFlag = textIncludesWords(job, jobNamePartsToInclude);
         }
       }
-
       let CompanyOrJobNameToExcludeFlag = true;
       if (CompanyOrJobNameToExclude !== undefined) {
         if (CompanyOrJobNameToExclude.length !== 0) {
-          CompanyOrJobNameToExcludeFlag = !textIncludesWords(job, jobNamePartsToInclude);
+          CompanyOrJobNameToExcludeFlag = !textIncludesWords(job, CompanyOrJobNameToExclude);
         }
       }
 
