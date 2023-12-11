@@ -70,7 +70,7 @@ npx playwright test
 
 Each search run log will be written to a seprate file in logs folder, e.g. PATH_TO_PROJECT_FOLDER_IN_YOUR_FILE_SYSTEM/logs/12-9-2023_11-49-55_PM.txt
 
-Log will be outpt to console/terminal as well as to a log file.
+Log will be output to console/terminal as well as to a log file.
 
 After each run - update config file with positions you already reviewed to filter them out next time when you run the search. To do that - add them into CompanyOrJobNameToExclude array in the job-search-config.js.
 
