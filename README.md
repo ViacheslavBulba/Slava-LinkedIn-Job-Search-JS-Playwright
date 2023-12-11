@@ -26,9 +26,9 @@ In Visual Studio Code install "Playwright Test for VSCode" extension, it will al
 
 In instructions below you will see PATH_TO_PROJECT_FOLDER_IN_YOUR_FILE_SYSTEM which refers to the project location in your file system, so please make sure to put your path value instead.
 
-For example, if I have the project downloaded and unzipped to folder ~/git/Slava-LinkedIn-Job-Search-JS-Playwright on my mac, then in my case PATH_TO_PROJECT_FOLDER_IN_YOUR_FILE_SYSTEM = ~/git/Slava-LinkedIn-Job-Search-JS-Playwright
+For example, if I have the project downloaded and unzipped to folder ~/Downloads/Slava-LinkedIn-Job-Search-JS-Playwright-main on my mac, then in my case PATH_TO_PROJECT_FOLDER_IN_YOUR_FILE_SYSTEM = ~/Downloads/Slava-LinkedIn-Job-Search-JS-Playwright-main
 
-I would not recommend using spaces in folder names in your path to avoid hussle of surrounding path with quotes "", but if you have at least one space in any of your folder names along the way - put the path in "", e.g. -  "~/git/Slava-LinkedIn-Job-Search-JS-Playwright".
+I would not recommend using spaces in folder names in your path to avoid hussle of surrounding path with quotes "", but if you have at least one space in any of your folder names along the way - put the path in "", e.g. -  "~/Downloads/Slava-LinkedIn-Job-Search-JS-Playwright-main".
 
 Open terminal and run commands
 
