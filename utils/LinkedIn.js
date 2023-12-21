@@ -165,7 +165,10 @@ export async function linkedInGetAllUnfilteredJobsOnOnePage(page) {
   const elements = await page.$$(locatorJobNames); // names and links go inside the same elements
   for (let el of elements) {
     const href = await el.getAttribute('href');
-    const shortUrl = href.substring(0, href.indexOf("?eBP="));
+    let shortUrl = href.substring(0, href.indexOf("?eBP="));
+    if (shortUrl === '') {
+      shortUrl = href;
+    }
     jobLinks.push(`https://www.linkedin.com${shortUrl}`);
     const name = (await el.textContent()).trim();
     jobNames.push(name);
