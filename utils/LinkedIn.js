@@ -90,8 +90,8 @@ async function clickOnFilterOption(text) {
 export async function linkedInSetUpFilters(page, linkedinDatePostedFilter) {
   await page.locator('//*[text()="All filters"]').click();
   await page.waitForTimeout(2000);
-  await page.locator('//*[text()="Most recent"]').first().click();
-  await page.waitForTimeout(2000);
+  // await page.locator('//*[text()="Most recent"]').first().click();
+  // await page.waitForTimeout(2000);
   if (experienceLevelFilter) {
     for (const exp of experienceLevelFilter) {
       await clickOnFilterOption(exp);
