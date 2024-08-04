@@ -1,6 +1,6 @@
-const { test } = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 
-import { CompanyOrJobNameToExclude, JobDescriptionsStopWordsArray, JobNamePartsToInclude, PositionsToSearch, RemoteJobsOnlyFilter, datePostedFilter, jobLocation, pageLimitToSearchForEachPosition } from '../configs/job-search-config';
+import { CompanyOrJobNameToExclude, JobDescriptionsStopWordsArray, JobNamePartsToInclude, PositionsToSearch, RemoteJobsOnlyFilter, datePostedFilter, jobLocation, pageLimitToSearchForEachPosition, username } from '../configs/job-search-config';
 import { printToFileAndConsole } from '../utils/FileUtils';
 import { linkedInCollectJobsAfterFiltersApplied, linkedInLogin, linkedInOpenEachPosition, linkedInSearchPosition, linkedInSearchPositionInLasVegas, linkedInSearchPositionInRemote, linkedInSetUpFilters } from '../utils/LinkedIn';
 import { getDateAndTime } from '../utils/StringUtils';
@@ -34,6 +34,13 @@ async function enterPosition(i) {
 
 test('linkedin job search', async ({ page }) => {
   printToFileAndConsole('Start time: ' + new Date().toLocaleString());
+  if (username === 'YOUR_LINKEDIN_USERNAME') {
+    printToFileAndConsole('');
+    printToFileAndConsole('PLEASE SPECIFY YOUR USERNAME AND PASSWORD IN - /Slava-LinkedIn-Job-Search-JS-Playwright/configs/job-search-config.js');
+    printToFileAndConsole('');
+    expect(username, 'PLEASE SPECIFY YOUR USERNAME AND PASSWORD IN - /Slava-LinkedIn-Job-Search-JS-Playwright/configs/job-search-config.js').not.toBe('YOUR_LINKEDIN_USERNAME');
+    return;
+  }
   await linkedInLogin(page);
   await enterPosition(0);
   await linkedInSetUpFilters(page, datePostedFilter);

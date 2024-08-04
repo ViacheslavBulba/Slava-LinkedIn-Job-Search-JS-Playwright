@@ -21,7 +21,7 @@ export async function linkedInEnterLocation(text, page) {
 
 export async function linkedInSearchPosition(positionName, location) {
   const page = process.playwrightPage;
-  printToFileAndConsole(`Searching positions for: ${positionName}`);
+  printToFileAndConsole(`Search positions: ${positionName}`);
   await linkedInEnterPosition(positionName, page);
   await linkedInEnterLocation(location, page);
   await page.keyboard.press('Enter');
@@ -35,41 +35,41 @@ export async function linkedInGetTotalResults() {
   return result;
 }
 
-const locatorAuthWall = '//button[@class="authwall-join-form__form-toggle--bottom form-toggle"]';
-const locatorUsername = '//*[@autocomplete="username"]';
+const locatorAuthWall1 = '//button[@class="authwall-join-form__form-toggle--bottom form-toggle"]';
+const locatorAuthWall2 = 'a.sign-in-form__sign-in-cta';
+const locatorUsername = '//*[@autocomplete="username" or @id="username"]';
 const locatorPassword = '//*[@autocomplete="current-password"]';
 const locatorSignInButton1 = '//button[@type="submit"][contains(text(),"Sign in")]';
 const locatorSignInButton2 = '//button[contains(text(),"Sign in")]';
 const locatorJobsMenu = '//*[@title="Jobs"]';
 
 export async function linkedInLogin(page) {
-  for (let index = 0; index < 2; index++) { // sometimes does not login first time, 1 retry attempt
-    await page.goto('https://www.linkedin.com/');
+  await page.goto('https://www.linkedin.com/');
+  await page.waitForTimeout(5000);
+  if ((await page.$$(locatorAuthWall1)).length > 0) {
+    await page.locator(locatorAuthWall1).click();
+    await page.waitForTimeout(1000);
+  }
+  if ((await page.$$(locatorUsername)).length == 0) { // sometimes blank page appears
+    await page.reload();
     await page.waitForTimeout(5000);
-    if ((await page.$$(locatorAuthWall)).length > 0) {
-      await page.locator(locatorAuthWall).click();
+    if ((await page.$$(locatorAuthWall1)).length > 0) {
+      await page.locator(locatorAuthWall1).click();
       await page.waitForTimeout(1000);
     }
-    if ((await page.$$(locatorUsername)).length == 0) { // sometimes blank page appears
-      await page.reload();
-      await page.waitForTimeout(5000);
-      if ((await page.$$(locatorAuthWall)).length > 0) {
-        await page.locator(locatorAuthWall).click();
-        await page.waitForTimeout(1000);
-      }
-    }
-    await page.locator(locatorUsername).type(username);
-    await page.locator(locatorPassword).type(password);
-    if ((await page.$$(locatorSignInButton1)).length > 0) {
-      await page.locator(locatorSignInButton1).click();
-    } else {
-      await page.locator(locatorSignInButton2).first().click();
-    }
-    await page.waitForTimeout(5000);
-    if ((await page.$$(locatorJobsMenu)).length > 0) { // sometimes does not login first time
-      break;
-    }
-  } // end of loop
+  }
+  if ((await page.$$(locatorAuthWall2)).length > 0) {
+    await page.locator(locatorAuthWall2).click();
+    await page.waitForTimeout(1000);
+  }
+  await page.locator(locatorUsername).type(username);
+  await page.locator(locatorPassword).type(password);
+  if ((await page.$$(locatorSignInButton1)).length > 0) {
+    await page.locator(locatorSignInButton1).click();
+  } else {
+    await page.locator(locatorSignInButton2).first().click();
+  }
+  await page.waitForTimeout(10000);
   await page.locator(locatorJobsMenu).click();
   await page.waitForTimeout(2000);
 }
@@ -147,47 +147,64 @@ export async function linkedInGetAllUnfilteredJobsOnOnePage(page) {
   const jobNames = [];
   const jobCompanies = [];
   const jobLinks = [];
-  const locatorJobNames = 'a.job-card-container__link'; // text // ".artdeco-entity-lockup__title a.job-card-container__link";
+  const locatorJobNames = 'a.job-card-container__link span strong'; // text // ".artdeco-entity-lockup__title a.job-card-container__link";
   const locatorJobCompanies = '.job-card-container__primary-description';
   const locatorJobLinks = 'a.job-card-container__link'; // href
-  if ((await page.$$('//*[text()="No matching jobs found."]')).length > 0) {
-    return unfilteredJobsOnOnePage;
-  }
   try {
-    await page.locator(locatorJobNames).first().hover();
-  } catch (ingore) {
-    printToFileAndConsole(`..........WARNING: error hovering over a job name for scrolling`);
-  }
-  for (let i = 0; i < 5; i++) {
-    await page.mouse.wheel(0, 700);
-    await page.waitForTimeout(1000);
-  }
-  const elements = await page.$$(locatorJobNames); // names and links go inside the same elements
-  for (let el of elements) {
-    const href = await el.getAttribute('href');
-    let shortUrl = href.substring(0, href.indexOf("?eBP="));
-    if (shortUrl === '') {
-      shortUrl = href;
+    if ((await page.$$('//*[text()="No matching jobs found."]')).length > 0) {
+      printToFileAndConsole('');
+      printToFileAndConsole('No matching jobs found.');
+      printToFileAndConsole('');
+      return unfilteredJobsOnOnePage;
     }
-    jobLinks.push(`https://www.linkedin.com${shortUrl}`);
-    const name = (await el.textContent()).trim();
-    jobNames.push(name);
-  }
-  const companyNamesElements = await page.$$(locatorJobCompanies);
-  for (let el of companyNamesElements) {
-    const company = (await el.textContent()).trim();
-    jobCompanies.push(company);
-  }
-  if (jobNames.length < 1) {
-    printToFileAndConsole('No matching jobs found.')
-  }
-  for (let i = 0; i < jobNames.length; i++) {
-    const jobEntryIncludingLink = `${jobCompanies[i]} --- ${jobNames[i]} --- ${jobLinks[i]}`
-    const jobEntryCompanyAndPositionOnly = `${jobCompanies[i]} --- ${jobNames[i]}`
-    if (!tempSetToExcludeDuplicates.has(jobEntryCompanyAndPositionOnly)) {
-      tempSetToExcludeDuplicates.add(jobEntryCompanyAndPositionOnly);
-      unfilteredJobsOnOnePage.add(jobEntryIncludingLink);
+    try {
+      await page.locator(locatorJobNames).first().hover();
+    } catch (ingore) {
+      printToFileAndConsole('ERROR HOVERING OVER A JOB NAME');
     }
+    for (let i = 0; i < 5; i++) {
+      await page.mouse.wheel(0, 700);
+      await page.waitForTimeout(1000);
+    }
+    const jobNamesElements = await page.$$(locatorJobNames);
+    for (let el of jobNamesElements) {
+      const name = (await el.textContent()).trim();
+      jobNames.push(name);
+    }
+    const jobLinksElements = await page.$$(locatorJobLinks);
+    for (let el of jobLinksElements) {
+      const href = await el.getAttribute('href');
+      let shortUrl = href.substring(0, href.indexOf("?eBP="));
+      if (shortUrl === '') {
+        if (href.includes('?currentJobId=') && href.includes('&eBP=')) {
+          const jobId = href.substring(href.indexOf("?currentJobId=") + 14, href.indexOf("&eBP="));
+          shortUrl = `/jobs/view/${jobId}/`;
+        } else {
+          shortUrl = href;
+        }
+      }
+      jobLinks.push(`https://www.linkedin.com${shortUrl}`);
+    }
+    const companyNamesElements = await page.$$(locatorJobCompanies);
+    for (let el of companyNamesElements) {
+      const company = (await el.textContent()).trim();
+      jobCompanies.push(company);
+    }
+    if (jobNames.length < 1) {
+      printToFileAndConsole('No matching jobs found.')
+    }
+    for (let i = 0; i < jobNames.length; i++) {
+      const jobEntryIncludingLink = `${jobCompanies[i]} --- ${jobNames[i]} --- ${jobLinks[i]}`
+      const jobEntryCompanyAndPositionOnly = `${jobCompanies[i]} --- ${jobNames[i]}`
+      if (!tempSetToExcludeDuplicates.has(jobEntryCompanyAndPositionOnly)) {
+        tempSetToExcludeDuplicates.add(jobEntryCompanyAndPositionOnly);
+        unfilteredJobsOnOnePage.add(jobEntryIncludingLink);
+      }
+    }
+  } catch (error) {
+    console.log('page crashed: Error: page.$$: Target crashed');
+    await page.reload();
+    await page.waitForTimeout(5000);
   }
   return unfilteredJobsOnOnePage;
 }
