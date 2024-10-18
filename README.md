@@ -32,7 +32,7 @@ For example, if I have the project downloaded and unzipped to folder ~/Downloads
 
 I would not recommend using spaces in folder names in your path to avoid hussle of surrounding path with quotes "", but if you have at least one space in any of your folder names along the way - put the path in "", e.g. - "~/Downloads/Slava-LinkedIn-Job-Search-JS-Playwright-main".
 
-Open terminal and run commands
+Open terminal and run commands:
 
 ```
 cd PATH_TO_PROJECT_FOLDER_IN_YOUR_FILE_SYSTEM
@@ -41,7 +41,7 @@ npm install
 
 It will install all dependencies.
 
-After that install playwright package, use default configuration when questions asked during the installation. Run in terminal:
+After that run in terminal:
 
 ```
 npx playwright install
@@ -72,7 +72,7 @@ export const PositionsToSearch = [
 
 # Run the search
 
-Then run in terminal or from Visual Studio Code
+Then run in terminal (or from Visual Studio Code under Testing Tab on the left)
 
 ```
 npx playwright test
@@ -87,7 +87,3 @@ Log will be output to console/terminal as well as to a log file.
 After each run - update config file with positions you already reviewed to filter them out next time when you run the search. To do that - add them into CompanyOrJobNameToExclude array in the job-search-config.js.
 
 ![](terminal_results.png)
-
-# Troubleshooting
-
-1. Error: Target page, context or browser has been closed - simply run the command again and it should go away
