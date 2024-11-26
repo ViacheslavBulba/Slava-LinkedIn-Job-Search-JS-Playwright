@@ -148,7 +148,7 @@ export async function linkedInGetAllUnfilteredJobsOnOnePage(page) {
   const jobCompanies = [];
   const jobLinks = [];
   const locatorJobNames = 'a.job-card-container__link span strong'; // text // ".artdeco-entity-lockup__title a.job-card-container__link";
-  const locatorJobCompanies = '.job-card-container__primary-description';
+  const locatorJobCompanies = '//*[@data-view-name="job-card"]//*[contains(@class,"artdeco-entity-lockup__subtitle")]'; // '.job-card-container__primary-description';
   const locatorJobLinks = 'a.job-card-container__link'; // href
   try {
     if ((await page.$$('//*[text()="No matching jobs found."]')).length > 0) {
