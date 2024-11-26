@@ -147,9 +147,10 @@ export async function linkedInGetAllUnfilteredJobsOnOnePage(page) {
   const jobNames = [];
   const jobCompanies = [];
   const jobLinks = [];
-  const locatorJobNames = 'a.job-card-container__link span strong'; // text // ".artdeco-entity-lockup__title a.job-card-container__link";
-  const locatorJobCompanies = '//*[@data-view-name="job-card"]//*[contains(@class,"artdeco-entity-lockup__subtitle")]'; // '.job-card-container__primary-description';
-  const locatorJobLinks = 'a.job-card-container__link'; // href
+  const locatorJobNames = '//li[not(contains(@class,"discovery-templates-entity-item"))]//*[@data-view-name="job-card"]//*[contains(@class,"artdeco-entity-lockup__title")]/a//strong'; // '//ul[@class="scaffold-layout__list-container"]//a[contains(@class,"job-card-container__link")]//strong'; // text // ".artdeco-entity-lockup__title a.job-card-container__link";
+  const locatorJobCompanies = '//li[not(contains(@class,"discovery-templates-entity-item"))]//*[@data-view-name="job-card"]//*[contains(@class,"artdeco-entity-lockup__subtitle")]'; // '//ul[@class="scaffold-layout__list-container"]//*[contains(@class,"job-card-container__primary-description")]';
+  const locatorJobLinks = '//li[not(contains(@class,"discovery-templates-entity-item"))]//a[contains(@class,"job-card-container__link")]'; //'//ul[@class="scaffold-layout__list-container"]//a[contains(@class,"job-card-container__link")]'; // href
+  const locatorJobLocations = '//li[not(contains(@class,"discovery-templates-entity-item"))]//*[@data-view-name="job-card"]//*[contains(@class,"artdeco-entity-lockup__caption")]'; // '//ul[@class="scaffold-layout__list-container"]//*[@data-view-name="job-card"]/div[1]/div[1]/div[2]/div[3]/ul[1]/li[1]';
   try {
     if ((await page.$$('//*[text()="No matching jobs found."]')).length > 0) {
       printToFileAndConsole('');
